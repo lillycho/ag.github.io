@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astronomy Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Righteous&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+        }
+    </style>
+    <script src="libs/p5.js"></script>
+    <script>
+        let whiteStars = [];
+        let redStars = [];
+        let yellowStars = [];
+        let blueStars = [];
+        let backLayer
+        let h1;
+        let title1;
+        let title2;
+        let title3;
+        let title4;
+        let titleText;
+        let img1;
+        let img2;
+        let exp;
+        let expBox;
+
+        class Star {
+            constructor() {
+                this.x = random(width);
+                this.y = random(height);
+                this.size = random(0.1, 0.5);
+                this.t = random(PI * 3);
+            }
+
+            draw() {
+                this.t += 0.1;
+                var scale = this.size + sin(this.t);
+                noStroke();
+                ellipse(this.x, this.y, scale, scale);
+            }
+        }
+
+        function setup() {
+            backLayer = createCanvas(windowWidth, windowHeight);
+            backLayer.position(0, 0);
+            for (let i = 0; i < windowHeight * 1.5; i++) {
+                whiteStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                redStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                yellowStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                blueStars[i] = new Star();
+            }
+
+            h1 = createElement('h1', '<a href="page1.html" style="color: white;">Astronomy Gallery <br><span style="font-size: 15px;">with APOD from NASA</span></a>');
+            h1.position(0, 0);
+            h1.style('font-family', '\'Righteous\', cursive')
+            h1.style('color', 'white');
+            h1.style('font-size', '50px');
+            h1.style('margin', '0px');
+            h1.style('padding', '40px 40px');
+            h1.style('line-height', '60%');
+
+            title1 = createElement('div');
+            title1.style('width', '50%');
+            title1.style('height', '12%')
+            //title1.style('padding', '1% 0 1% 0')
+            title1.style('background-color', 'rgba(255, 255, 255, 0.2)');
+            title1.position(windowWidth / 2, windowHeight * (1 / 5));
+
+            title2 = createElement('div');
+            title2.style('width', '49%');
+            title2.style('height', '12%')
+            //title2.style('padding', '1% 0 1% 0')
+            title2.style('background-color', 'rgba(255, 255, 255, 0.2)');
+            title2.position(windowWidth * (51 / 100), windowHeight * (1 / 5));
+
+            title3 = createElement('div');
+            title3.style('width', '48%');
+            title3.style('height', '12%')
+            //title3.style('padding', '1% 0 1% 0')
+            title3.style('background-color', 'rgba(255, 255, 255, 0.2)');
+            title3.position(windowWidth * (52 / 100), windowHeight * (1 / 5));
+
+            title4 = createElement('div');
+            title4.style('width', '47%');
+            title4.style('height', '12%');
+            title4.style('background-color', 'rgba(255, 255, 255, 0.2)');
+            title4.position(windowWidth * (53 / 100), windowHeight * (1 / 5));
+
+            titleText = createElement('div', 'What is APOD?');
+            titleText.style('font-family', '\'Righteous\', cursive')
+            titleText.style('width', '47%');
+            titleText.style('padding', '2% 0 2% 0')
+            titleText.style('font-size', '30px')
+            titleText.style('color', 'black');
+            titleText.style('text-align', 'center');
+            titleText.position(windowWidth * (53 / 100), windowHeight * (1 / 5));
+
+            img1 = createImg('img1.jpg', 'main');
+            img1.style('height', '50%');
+            img1.style('object-fit', 'cover');
+            img1.style('width', '30%');
+            //img1.style('height', '100%');
+            img1.position(windowWidth * (1 / 15), windowHeight * (2 / 7));
+            img1.style('border-radius', '20px');
+            img1.style('box-shadow', '-10px 10px 2px');
+
+            img2 = createImg('img2.jpg', 'main');
+            img2.style('height', '50%');
+            img2.style('object-fit', 'cover');
+            img2.style('width', '30%');
+            //img1.style('height', '100%');
+            img2.position(windowWidth * (2 / 15), windowHeight * (3 / 7));
+            img2.style('border-radius', '20px');
+            img2.style('box-shadow', '-10px 10px 2px');
+
+            exp = ' The Astronomy Picture of the Day (APOD) is based upon work supported by NASA under award No. 80NSSC17M0076. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Aeronautics and Space Administration.';
+            expBox = createElement('div', exp);
+            expBox.style('width', '42%');
+            expBox.style('padding', '3% 2%');
+            //expBox.style('background-color', 'rgba(255, 255, 255, 0.7)');
+            expBox.style('color', 'white');
+            expBox.style('line-height', '150%');
+            expBox.style('border-radius', '20px');
+            expBox.style('font-size', '20px');
+            expBox.position(windowWidth * (52 / 100), windowHeight * (3 / 7));
+        }
+
+        function draw() {
+            background(0);
+
+            // draw stars
+            for (let i = 0; i < whiteStars.length; i++) {
+                fill(255);
+                whiteStars[i].draw();
+            }
+            for (let i = 0; i < redStars.length; i++) {
+                fill(255, 100, 100);
+                redStars[i].draw();
+            }
+            for (let i = 0; i < yellowStars.length; i++) {
+                fill(255, 255, 100);
+                yellowStars[i].draw();
+            }
+            for (let i = 0; i < blueStars.length; i++) {
+                fill(100, 100, 255);
+                blueStars[i].draw();
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

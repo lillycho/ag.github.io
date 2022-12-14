@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astronomy Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Righteous&display=swap" rel="stylesheet">
+    <script src="libs/p5.js"></script>
+    <script>
+        let whiteStars = [];
+        let redStars = [];
+        let yellowStars = [];
+        let blueStars = [];
+        let backLayer;
+        let h1;
+        let title1;
+        let title2;
+        let title3;
+        let title4;
+        let titleText;
+        let selBox;
+        let boxTitle;
+        let inputBox;
+        let inputBtn;
+        let dateVal;
+        let url;
+        let imgUrl;
+        let imgDate;
+        let imgInfo;
+        let imgTitle;
+        let imgCopy;
+        let img;
+        let json;
+        let g1, g2, g3, g4;
+        let expText;
+        let expBox;
+        let samImg;
+
+        class Star {
+            constructor() {
+                this.x = random(width);
+                this.y = random(height);
+                this.size = random(0.1, 0.5);
+                this.t = random(PI * 3);
+            }
+
+            draw() {
+                this.t += 0.1;
+                var scale = this.size + sin(this.t);
+                noStroke();
+                ellipse(this.x, this.y, scale, scale);
+            }
+        }
+
+        function setup() {
+            backLayer = createCanvas(windowWidth, windowHeight);
+            backLayer.position(0, 0);
+            for (let i = 0; i < windowHeight * 1.5; i++) {
+                whiteStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                redStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                yellowStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                blueStars[i] = new Star();
+            }
+
+            h1 = createElement('h1', '<a href="page1.html" style="color: white;">Astronomy Gallery <br><span style="font-size: 15px;">with APOD from NASA</span></a>');
+            h1.position(0, 0);
+            h1.style('font-family', '\'Righteous\', cursive')
+            h1.style('color', 'white');
+            h1.style('font-size', '50px');
+            h1.style('margin', '0px');
+            h1.style('padding', '40px 40px');
+            h1.style('line-height', '60%');
+
+            title1 = createElement('div');
+            title1.style('width', '35%');
+            title1.style('height', '12%')
+            //title1.style('padding', '1% 0 1% 0')
+            title1.style('background-color', 'rgba(255, 255, 255, 0.2)');
+            title1.position(0, windowHeight * (1 / 4));
+
+            title2 = createElement('div');
+            title2.style('width', '34%');
+            title2.style('height', '12%')
+            //title2.style('padding', '1% 0 1% 0')
+            title2.style('background-color', 'rgba(255, 255, 255, 0.2)');
+            title2.position(0, windowHeight * (1 / 4));
+
+            title3 = createElement('div');
+            title3.style('width', '33%');
+            title3.style('height', '12%')
+            //title3.style('padding', '1% 0 1% 0')
+            title3.style('background-color', 'rgba(255, 255, 255, 0.2)');
+            title3.position(0, windowHeight * (1 / 4));
+
+            title4 = createElement('div');
+            title4.style('width', '32%');
+            title4.style('height', '12%');
+            title4.style('background-color', 'rgba(255, 255, 255, 0.2)');
+            title4.position(0, windowHeight * (1 / 4));
+
+            titleText = createElement('div', 'Search Your Picture!');
+            titleText.style('font-family', '\'Righteous\', cursive')
+            titleText.style('width', '32%');
+            titleText.style('padding', '2% 0 2% 0')
+            titleText.style('font-size', '30px')
+            titleText.style('color', 'black');
+            titleText.style('text-align', 'center');
+            titleText.position(0, windowHeight * (1 / 4));
+
+            selBox = createElement('div');
+            selBox.style('width', '30%');
+            selBox.style('height', '15%');
+            selBox.style('background-color', 'rgba(255, 255, 255, 0.3)');
+            selBox.style('border-radius', '20px');
+            selBox.position(windowWidth * (2 / 100), windowHeight * (3 / 7));
+
+            boxTitle = createElement('div', 'Insert Date Here');
+            boxTitle.style('padding', '1% 2%');
+            boxTitle.style('font-size', '20px');
+            boxTitle.style('font-weight', 'bold');
+            boxTitle.style('color', 'white');
+            boxTitle.position(windowWidth * (2 / 100), windowHeight * (3 / 7));
+
+            inputBox = createInput('YYYY-MM-DD');
+            inputBox.size(windowWidth * (13 / 100), windowHeight * (4 / 100));
+            inputBox.position(windowWidth * (4 / 100), windowHeight * (1 / 2));
+            //inputBox.mousePressed(controlDate);
+
+            inputBtn = createButton('Insert');
+            inputBtn.size(windowWidth * (6 / 100), windowHeight * (4 / 100));
+            inputBtn.position(windowWidth * (22 / 100), windowHeight * (1 / 2));
+            inputBtn.mousePressed(controlDate);
+
+            expText = '<span style="font-size: 30px; font-weight: bold;">Picture Info.</span><br><br>This is a default image. After you insert the date, page will show APOD on the inserted date.';
+
+            expBox = createElement('div', expText);
+            expBox.style('padding', '2% 0 2% 0');
+            expBox.style('width', '30%');
+            expBox.style('color', 'white');
+            expBox.style('font-size', '20px');
+            expBox.style('line-height', '150%');
+            expBox.position(windowWidth * (2 / 100), windowHeight * (5 / 8))
+
+            samImg = createImg('img3.jpg', 'main');
+            samImg.style('height', '100%');
+            samImg.style('object-fit', 'cover');
+            samImg.style('width', '60%');
+            samImg.position(windowWidth * (4 / 10), 0);
+
+            g1 = createElement('div');
+            g2 = createElement('div');
+            g3 = createElement('div');
+            g4 = createElement('div');
+
+            g1.style('height', '100%');
+            g2.style('height', '100%');
+            g3.style('height', '100%');
+            g4.style('height', '100%');
+
+            g1.style('width', '8%');
+            g2.style('width', '6%');
+            g3.style('width', '4%');
+            g4.style('width', '2%');
+
+            g1.style('background-color', 'rgba(0, 0, 0, 0.3)');
+            g2.style('background-color', 'rgba(0, 0, 0, 0.3)');
+            g3.style('background-color', 'rgba(0, 0, 0, 0.3)');
+            g4.style('background-color', 'rgba(0, 0, 0, 0.3)');
+
+            g1.position(windowWidth * (4 / 10), 0);
+            g2.position(windowWidth * (4 / 10), 0);
+            g3.position(windowWidth * (4 / 10), 0);
+            g4.position(windowWidth * (4 / 10), 0);
+        }
+
+        function draw() {
+            background(0);
+
+            // draw stars
+            for (let i = 0; i < whiteStars.length; i++) {
+                fill(255);
+                whiteStars[i].draw();
+            }
+            for (let i = 0; i < redStars.length; i++) {
+                fill(255, 100, 100);
+                redStars[i].draw();
+            }
+            for (let i = 0; i < yellowStars.length; i++) {
+                fill(255, 255, 100);
+                yellowStars[i].draw();
+            }
+            for (let i = 0; i < blueStars.length; i++) {
+                fill(100, 100, 255);
+                blueStars[i].draw();
+            }
+        }
+
+        function controlDate() {
+            dateVal = inputBox.value();
+            //console.log(dateVal);
+            url = 'https://api.nasa.gov/planetary/apod?api_key=0rj20UUOe3egIlSUOtermiSeNY8Ow7x7i5RTIite&start_date=' + dateVal + '&end_date=' + dateVal;
+            //console.log(url);
+            loadJSON(url, presetData);
+            if (imgCopy) {
+                /*
+                imgUrl = json.url;
+                imgDate = json.date;
+                imgInfo = json.explanation;
+                imgTitle = json.title;
+                imgCopy = json.copyright;
+                */
+                //console.log(imgUrl);
+
+                img = createImg(imgUrl, 'main');
+                img.style('height', '100%');
+                img.style('object-fit', 'cover');
+                img.style('width', '60%');
+                img.position(windowWidth * (4 / 10), 0);
+                console.log(dateVal);
+
+                g1 = createElement('div');
+                g2 = createElement('div');
+                g3 = createElement('div');
+                g4 = createElement('div');
+
+                g1.style('height', '100%');
+                g2.style('height', '100%');
+                g3.style('height', '100%');
+                g4.style('height', '100%');
+
+                g1.style('width', '8%');
+                g2.style('width', '6%');
+                g3.style('width', '4%');
+                g4.style('width', '2%');
+
+                g1.style('background-color', 'rgba(0, 0, 0, 0.3)');
+                g2.style('background-color', 'rgba(0, 0, 0, 0.3)');
+                g3.style('background-color', 'rgba(0, 0, 0, 0.3)');
+                g4.style('background-color', 'rgba(0, 0, 0, 0.3)');
+
+                g1.position(windowWidth * (4 / 10), 0);
+                g2.position(windowWidth * (4 / 10), 0);
+                g3.position(windowWidth * (4 / 10), 0);
+                g4.position(windowWidth * (4 / 10), 0);
+
+                expText = '<span style="font-size: 30px; font-weight: bold;">Picture Info.</span><br><br>' + '<span style="font-weight: bold;">Title: </span>' + imgTitle + '<br><span style="font-weight: bold;">Copyright: </span>' + imgCopy;
+                expBox.html(expText);
+
+            }
+            /*
+            img = createImg(imgUrl, 'main');
+            img.style('height', '100%');
+            img.style('object-fit', 'cover');
+            img.style('width', '60%');
+            img.position(windowWidth * (4 / 10), 0);
+            */
+        }
+
+        function presetData(data) {
+            //json = data;
+            //console.log('hello');
+
+            imgUrl = data[0].url;
+            imgDate = data[0].date;
+            imgInfo = data[0].explanation;
+            imgTitle = data[0].title;
+            imgCopy = data[0].copyright;
+
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

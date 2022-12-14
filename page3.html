@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astronomy Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Righteous&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+        }
+    </style>
+    <script src="libs/p5.js"></script>
+    <script>
+        let whiteStars = [];
+        let redStars = [];
+        let yellowStars = [];
+        let blueStars = [];
+        let backLayer;
+        let h1;
+
+        class Star {
+            constructor() {
+                this.x = random(width);
+                this.y = random(height);
+                this.size = random(0.1, 0.5);
+                this.t = random(PI * 3);
+            }
+
+            draw() {
+                this.t += 0.1;
+                var scale = this.size + sin(this.t);
+                noStroke();
+                ellipse(this.x, this.y, scale, scale);
+            }
+        }
+
+        function setup() {
+            backLayer = createCanvas(windowWidth, windowHeight);
+            backLayer.position(0, 0);
+            for (let i = 0; i < windowHeight * 1.5; i++) {
+                whiteStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                redStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                yellowStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                blueStars[i] = new Star();
+            }
+
+            h1 = createElement('h1', '<a href="page1.html" style="color: white;">Astronomy Gallery <br><span style="font-size: 15px;">with APOD from NASA</span></a>');
+            h1.position(0, 0);
+            h1.style('font-family', '\'Righteous\', cursive')
+            h1.style('color', 'white');
+            h1.style('font-size', '50px');
+            h1.style('margin', '0px');
+            h1.style('padding', '40px 40px');
+            h1.style('line-height', '60%');
+        }
+
+        function draw() {
+            background(0);
+
+            // draw stars
+            for (let i = 0; i < whiteStars.length; i++) {
+                fill(255);
+                whiteStars[i].draw();
+            }
+            for (let i = 0; i < redStars.length; i++) {
+                fill(255, 100, 100);
+                redStars[i].draw();
+            }
+            for (let i = 0; i < yellowStars.length; i++) {
+                fill(255, 255, 100);
+                yellowStars[i].draw();
+            }
+            for (let i = 0; i < blueStars.length; i++) {
+                fill(100, 100, 255);
+                blueStars[i].draw();
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

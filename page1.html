@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astronomy Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Righteous&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+        }
+    </style>
+    <script src="libs/p5.js"></script>
+    <script>
+        let whiteStars = [];
+        let redStars = [];
+        let yellowStars = [];
+        let blueStars = [];
+        //let expLayer;
+        //let tag;
+        let imgUrl;
+        let imgDate;
+        let imgInfo;
+        let img, img1, img2, img3, img4;
+        //let contents;
+        //let gLayer1;
+        //let c1;
+        //let graphic1;
+        let g1;
+        let g2;
+        let g3;
+        let g4;
+        let exp;
+        let information;
+        let a1;
+        let a2;
+        let a3;
+        //let backgroundLayer;
+
+
+        function preload() {
+            loadJSON('https://api.nasa.gov/planetary/apod?api_key=0rj20UUOe3egIlSUOtermiSeNY8Ow7x7i5RTIite', presetData);
+            //img = loadImage('https://apod.nasa.gov/apod/image/2212/iotruecolor_galileo_960.jpg');
+        }
+
+        function presetData(data) {
+            imgUrl = data.url;
+            imgDate = data.date;
+            imgInfo = data.explanation;
+        }
+
+        function setup() {
+            img = createImg(imgUrl, 'main');
+            img.style('height', '100%');
+            img.style('object-fit', 'cover');
+            img.style('width', '50%');
+            img.style('height', '100%');
+            img.position(windowWidth / 2, 0);
+            //createCanvas(windowWidth, windowHeight);
+            expLayer = createCanvas(windowWidth / 2, windowHeight);
+            expLayer.position(0, 0);
+
+            // make stars
+            for (let i = 0; i < windowHeight * 1.5; i++) {
+                whiteStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                redStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                yellowStars[i] = new Star();
+            }
+            for (let i = 0; i < windowHeight / 3 * 2; i++) {
+                blueStars[i] = new Star();
+            }
+
+            h1 = createElement('h1', '<a href="page1.html" style="color: white;">Astronomy Gallery <br><span style="font-size: 15px;">with APOD from NASA</span></a>');
+            h1.position(0, 0);
+            h1.style('font-family', '\'Righteous\', cursive')
+            h1.style('color', 'white');
+            h1.style('font-size', '50px');
+            h1.style('margin', '0px');
+            h1.style('padding', '40px 40px');
+            h1.style('line-height', '60%');
+
+            expLayer.parent('contents');
+            img.parent('contents');
+            /*
+            //createCanvas(windowWidth, windowHeight);
+            gLayer1 = createGraphics(windowWidth, windowHeight);
+            //gLayer1.position(0, 0);
+            //gLayer1.background(0, 0, 0);
+            c1 = color(0, 0, 0, 50);
+            gLayer1.noStroke();
+            gLayer1.fill(c1);
+            gLayer1.rect(windowWidth / 2, 0, windowWidth / 6, windowHeight);
+            gLayer1.rect(windowWidth / 2, 0, windowWidth / 30 * 4, windowHeight);
+            gLayer1.rect(windowWidth / 2, 0, windowWidth / 30 * 3, windowHeight);
+            gLayer1.rect(windowWidth / 2, 0, windowWidth / 30 * 2, windowHeight);
+            gLayer1.rect(windowWidth / 2, 0, windowWidth / 30, windowHeight);
+            graphic1 = createImg()
+            image(gLayer1, 0, 0);
+            */
+            /*
+                        a1 = createElement('a href="page1.html" id="a1"');
+                        a2 = createElement('a href="page1.html" id="a2"');
+                        a3 = createElement('a href="page1.html" id="a3"');
+            */
+            img4 = createImg('icon4.png', 'main4');
+            img3 = createImg('icon3.png', 'main3');
+            img2 = createImg('icon2.png', 'main2');
+            //img1 = createImg('icon1.png', 'main2');
+
+
+            img4.parent('a3');
+            img3.parent('a2');
+            img2.parent('a1');
+            //img1.parent('nav');
+
+            img4.id('icon4');
+            img3.id('icon3');
+            img2.id('icon2');
+            //img1.id('icon1');
+
+            img2.style('height', '40%');
+            img2.style('object-fit', 'cover');
+            img2.style('width', 'auto');
+            img2.position(windowWidth / 4 - (windowHeight * (1 / 5)) + (windowHeight * (3 / 100)), windowHeight / 2 - (windowHeight * (15 / 100)) + (windowHeight * (25 / 100) - (windowHeight * (3 / 100))));
+
+            img3.style('height', '40%');
+            img3.style('object-fit', 'cover');
+            img3.style('width', 'auto');
+            img3.position(windowWidth / 4 - (windowHeight * (1 / 5)) - (windowHeight * (20 / 100)) - (windowHeight * (3 / 100)), windowHeight / 2 - (windowHeight * (15 / 100)) - (windowHeight * (15 / 100)) + (windowHeight * (3 / 100)));
+
+            img4.style('height', '40%');
+            img4.style('object-fit', 'cover');
+            img4.style('width', 'auto');
+            img4.position(windowWidth / 4 - (windowHeight * (1 / 5)) + (windowHeight * (20 / 100)) - (windowHeight * (3 / 100)), windowHeight / 2 - (windowHeight * (15 / 100)) - (windowHeight * (15 / 100)) - (windowHeight * (3 / 100)));
+            /*
+            img1.style('height', '45%');
+            img1.style('object-fit', 'cover');
+            img1.style('width', 'auto');
+            img1.position(windowWidth / 4 - (windowHeight * (225 / 1000)), windowHeight / 2 - (windowHeight * (225 / 1000)));
+            */
+            g1 = createElement('div');
+            g2 = createElement('div');
+            g3 = createElement('div');
+            g4 = createElement('div');
+
+            g1.style('height', '100%');
+            g2.style('height', '100%');
+            g3.style('height', '100%');
+            g4.style('height', '100%');
+
+            g1.style('width', '8%');
+            g2.style('width', '6%');
+            g3.style('width', '4%');
+            g4.style('width', '2%');
+
+            g1.style('background-color', 'rgba(0, 0, 0, 0.3)');
+            g2.style('background-color', 'rgba(0, 0, 0, 0.3)');
+            g3.style('background-color', 'rgba(0, 0, 0, 0.3)');
+            g4.style('background-color', 'rgba(0, 0, 0, 0.3)');
+
+            g1.position(windowWidth / 2, 0);
+            g2.position(windowWidth / 2, 0);
+            g3.position(windowWidth / 2, 0);
+            g4.position(windowWidth / 2, 0);
+
+            information = '<span style="font-size: 23px; font-weight: bold;">Today\'s APOD</span><br>' + imgInfo;
+
+            exp = createElement('div', information);
+            exp.style('margin', '0');
+            exp.style('color', 'white');
+            exp.style('font-size', '13px');
+            exp.style('width', '36%');
+            exp.style('height', '30%');
+            exp.style('background-color', 'rgba(30, 30, 30, 0.7');
+            exp.position(windowWidth * (61 / 100), windowHeight * (65 / 100));
+        }
+
+        class Star {
+            constructor() {
+                this.x = random(width);
+                this.y = random(height);
+                this.size = random(0.1, 0.5);
+                this.t = random(PI * 3);
+            }
+
+            draw() {
+                this.t += 0.1;
+                var scale = this.size + sin(this.t);
+                noStroke();
+                ellipse(this.x, this.y, scale, scale);
+            }
+        }
+
+        function draw() {
+            background(0);
+
+            // draw stars
+            for (let i = 0; i < whiteStars.length; i++) {
+                fill(255);
+                whiteStars[i].draw();
+            }
+            for (let i = 0; i < redStars.length; i++) {
+                fill(255, 100, 100);
+                redStars[i].draw();
+            }
+            for (let i = 0; i < yellowStars.length; i++) {
+                fill(255, 255, 100);
+                yellowStars[i].draw();
+            }
+            for (let i = 0; i < blueStars.length; i++) {
+                fill(100, 100, 255);
+                blueStars[i].draw();
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id="contents">
+    </div>
+
+    <a href="page2.html" id="a1">
+    </a>
+    <a href="page3.html" id="a2">
+    </a>
+    <a href="page4.html" id="a3">
+    </a>
+
+</body>
+
+</html>
